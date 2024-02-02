@@ -72,9 +72,25 @@ onUpdate(() => {
     playerHealth -= 20
 
 })
+
+onKeyPress('h', () => {
+
+})
+
+const enemyNumber = {}
 onKeyPress('g', () => {
-    let newHostile = new spawnTest(1)
-    onKeyPress('h', () => {console.log(newHostile)})
+    // let newHostile = new spawnTest(1)
+    // onKeyPress('h', () => {console.log(newHostile)})
+    function createEnemyVariable(number) {
+     enemyNumber[number] = new spawnTest(1);
+    }
+    function getEnemyVariable(number) {
+    enemyNumber[number];
+    }
+    for (let i=0;i<=4;i++) {
+        createEnemyVariable(i)
+    }
+    onKeyPress('l', () => {console.log(enemyNumber)})
 })
 
 
@@ -82,8 +98,25 @@ function spawnTest(difficulty) {
     const level = difficulty
     let randomX = Math.ceil(Math.random() * 100)
     let randomY = Math.ceil(Math.random() * 100)
+    let enemyHealth = (100 * level)
     const enemy = add([sprite("64xTile"), area(),body(),pos(randomX, randomY),scale(0.5),"hostile"],)
-    let enemyHealth = 100 * level
+    const HostileHpBar = add([
+        text(enemyHealth, {size: 12,}),
+        pos(player.pos.x-10, player.pos.y-10),
+        follow(enemy),
+    ])
+    onCollide("hostile", "player", () => {
+        enemyHealth -= 20
+        console.log(enemyHealth)
+    })
+    onUpdate(() => {
+        HostileHpBar.text = enemyHealth
+        if (enemyHealth <= 0) {
+            destroy(enemy)
+            destroy(HostileHpBar)
+        }
+    }
+        )
     console.log(`X:${randomX}.  Y:${randomY}`)
 
 
