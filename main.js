@@ -11,7 +11,7 @@ setBackground(Color.fromHex('#ADD8E6'))
 loadMap()
 
 const grassTile16x = loadSprite("grass-tile-16", "assets/grass.png")
-
+const enemyTile = loadSprite("grass-tile-16", "assets/grass.png")
 let speed = 60
 const mainPlayer = loadSprite("64xTile", "assets/64xTile.png")
 const player = add([sprite("64xTile"), area(),body(),pos(30, 20),scale(0.5),"player"], )
@@ -51,6 +51,7 @@ onUpdate(() => {
         hpBar.text = "dead"
     }
 
+
  })
  onMouseMove(() => {
     const playerPosition = player.pos;
@@ -71,6 +72,23 @@ onUpdate(() => {
     playerHealth -= 20
 
 })
+onKeyPress('g', () => {
+    let newHostile = new spawnTest(1)
+    onKeyPress('h', () => {console.log(newHostile)})
+})
+
+
+function spawnTest(difficulty) {
+    const level = difficulty
+    let randomX = Math.ceil(Math.random() * 100)
+    let randomY = Math.ceil(Math.random() * 100)
+    const enemy = add([sprite("64xTile"), area(),body(),pos(randomX, randomY),scale(0.5),"hostile"],)
+    let enemyHealth = 100 * level
+    console.log(`X:${randomX}.  Y:${randomY}`)
+
+
+}
+
 
 export { grassTile16x }
 
