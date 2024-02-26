@@ -23,8 +23,6 @@ const hpBar = add([
     { value: health },
 ])
 
-
-
 // wasd movement
 onKeyDown('w', () => {player.move(0, -speed)})
 onKeyDown('a', () => {player.move(-speed, 0)})
@@ -50,8 +48,6 @@ onUpdate(() => {
         hpBar.value = -1000
         hpBar.text = "dead"
     }
-
-
  })
  onMouseMove(() => {
     const playerPosition = player.pos;
@@ -61,67 +57,36 @@ onUpdate(() => {
     player.angle = angleInDeg
  })
 
-// debug stuff
- onKeyPress('f', () => {
-    // player.move(3000,0)
-    // drawCircle({
-    //     pos: player.pos,
-    //     radius: 50,
-    //     color: rgb(255, 255, 0),
-    // })
+
+onKeyPress('f', () => {
     playerHealth -= 20
-
 })
 
-onKeyPress('h', () => {
-
-})
-
-const enemyNumber = {}
-onKeyPress('g', () => {
-    // let newHostile = new spawnTest(1)
-    // onKeyPress('h', () => {console.log(newHostile)})
-    function createEnemyVariable(number) {
-     enemyNumber[number] = new spawnTest(1);
+class Enemy {
+    constructor(level) {
+        let randomX = Math.ceil(Math.random(1,200) * 100)
+        let randomY = Math.ceil(Math.random(1,200) * 100)
+        this.level = level
+        this.enemyHealth = 100 * this.level
+        this.enemy = add([sprite("64xTile"), area(),body(),pos(randomX, randomY),scale(0.5),"hostile"],)
+        this.HostileHpBar = add([
+            text(this.enemyHealth, {size: 12,}),
+            pos(player.pos.x-10, player.pos.y-10),
+            follow(this.enemy),])
     }
-    function getEnemyVariable(number) {
-    enemyNumber[number];
+    printHealth() {
+        console.log(this.enemyHealth)
     }
-    for (let i=0;i<=4;i++) {
-        createEnemyVariable(i)
+    looseHealth(amount) {
+        this.enemyHealth -= 20
     }
-    onKeyPress('l', () => {console.log(enemyNumber)})
-})
-
-
-function spawnTest(difficulty) {
-    const level = difficulty
-    let randomX = Math.ceil(Math.random() * 100)
-    let randomY = Math.ceil(Math.random() * 100)
-    let enemyHealth = (100 * level)
-    const enemy = add([sprite("64xTile"), area(),body(),pos(randomX, randomY),scale(0.5),"hostile"],)
-    const HostileHpBar = add([
-        text(enemyHealth, {size: 12,}),
-        pos(player.pos.x-10, player.pos.y-10),
-        follow(enemy),
-    ])
-    onCollide("hostile", "player", () => {
-        enemyHealth -= 20
-        console.log(enemyHealth)
-    })
-    onUpdate(() => {
-        HostileHpBar.text = enemyHealth
-        if (enemyHealth <= 0) {
-            destroy(enemy)
-            destroy(HostileHpBar)
-        }
-    }
-        )
-    console.log(`X:${randomX}.  Y:${randomY}`)
-
 
 }
 
+let firstWave = []
+for (let first=0;first<=10;i++) {
+    firstWave.push(`firstEnemy${i}`)
+}
 
 export { grassTile16x }
 
