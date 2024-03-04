@@ -57,9 +57,6 @@ onUpdate(() => {
     player.angle = angleInDeg
  })
 
-onKeyPress('f', () => {
-    playerHealth -= 20
-})
 
 class Enemy {
     constructor(level) {
@@ -67,37 +64,30 @@ class Enemy {
         let randomY = Math.ceil(Math.random(1,200) * 100)
         this.level = level
         this.enemyHealth = 100 * level
-        this.enemy = add([sprite("64xTile"), area(),body(),pos(randomX, randomY),scale(0.5),"hostile"],)
-        this.HostileHpBar = add([
-            text(this.enemyHealth, {size: 12,}),
-            pos(player.pos.x-10, player.pos.y-10),
-            follow(this.enemy),])
+        this.enemy = add([sprite("64xTile"), area(),body(),pos(randomX, randomY),scale(0.5),health(100),"hostile"],)
+        // this.HostileHpBar = add([
+        //     text(this.enemyHealth, {size: 12,}),
+        //     pos(player.pos.x-10, player.pos.y-10),
+        //     follow(this.enemy),])
     }
-    printHealth() {
-        console.log(this.enemyHealth)
-    }
-    looseHealth(amount) {
-        this.enemyHealth -= 20
-    }
-
 }
 
 
 let firstWave = []
 for (let first=0;first<=1;first++) {
     firstWave.push(`firstEnemy${first}`)
-    firstWave[first] = new Enemy(1)
-    firstWave[first].enemyHealth = 100
-    console.log(firstWave[first].enemyHealth)
+    let randomX = Math.ceil(Math.random(1,200) * 100)
+    let randomY = Math.ceil(Math.random(1,200) * 100)
+    firstWave[first] = add([sprite("64xTile"), area(),body(),pos(randomX, randomY),scale(0.5),"hostile",{health: 100}])
+    console.log(firstWave[first].health)
+    // new Enemy(1)
 }
 onUpdate(() => {
     onCollide("hostile", "player", (hostile,player) => {
-        hostile.enemyHealth -= 20
-        hostile.move(0, -speed)
-        console.log(hostile)
+        console.log(hostile.health)
     })
 })
-console.log(firstWave)
+
 
 export { grassTile16x }
 
